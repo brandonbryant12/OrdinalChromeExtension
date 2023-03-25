@@ -1,15 +1,27 @@
+const DEFAULT_INDEXER_API = "https://ordinals.gorillapool.io/api/files/inscriptions/";
+
+const indexerAPIInput = document.getElementById("indexerAPI");
+
+chrome.storage.sync.get("indexerAPI", (data) => {
+  indexerAPIInput.value = data.indexerAPI || DEFAULT_INDEXER_API;
+});
+
+document.getElementById('indexerAPIForm').addEventListener('submit', (event) => {
+  event.preventDefault();
+  chrome.storage.sync.set({ indexerAPI: indexerAPIInput.value });
+});
+
 document.getElementById('toggleHandler').addEventListener('click', () => {
   chrome.runtime.sendMessage({ action: 'toggleHandler' }, (response) => {
-    updateButtonText(response.handlerEnabled);
+    updateToggleState(response.handlerEnabled);
   });
 });
 
-function updateButtonText(enabled) {
-  const button = document.getElementById('toggleHandler');
-  button.textContent = enabled ? 'Disable Handler' : 'Enable Handler';
+function updateToggleState(enabled) {
+  const toggleInput = document.getElementById('toggleHandler');
+  toggleInput.checked = enabled;
 }
 
-// Request the current handler state from the background script when the popup opens
 chrome.runtime.sendMessage({ action: 'getHandlerState' }, (response) => {
-  updateButtonText(response.handlerEnabled);
+  updateToggleState(response.handlerEnabled);
 });

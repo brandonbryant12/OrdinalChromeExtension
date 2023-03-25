@@ -34,7 +34,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
 
 chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
   if (changeInfo.status === 'complete') {
-    chrome.tabs.sendMessage(tabId, { action: 'handleImages' });
+    chrome.tabs.sendMessage(tabId, { action: 'handleMedia' });
   }
 });
 
